@@ -46,7 +46,10 @@ class GoString():
         return len(self.liberties)
 
     def __eq__(self, other):
-        return isinstance(other, GoString) and self.color == other.color and self.stones == other.stones and self.liberties == other.liberties
+        return isinstance(other, GoString) and \
+            self.color == other.color and \
+            self.stones == other.stones and \
+            self.liberties == other.liberties
 
 
 class Board():
@@ -72,23 +75,23 @@ class Board():
             elif neighbor_string.color == player:
                 if neighbor_string not in adjacent_same_color:
                     adjacent_same_color.append(neighbor_string)
-                else:
-                    if neighbor_string not in adjacent_opposite_color:
-                        adjacent_opposite_color.append(neighbor_string)
+            else:
+                if neighbor_string not in adjacent_opposite_color:
+                    adjacent_opposite_color.append(neighbor_string)
             
-            new_string = GoString(player, [point], liberties)
-            for same_color_string in adjacent_same_color: # 同じ色の隣接する連をマージする
-                new_string = new_string.merged_with(same_color_string)
-            for new_string_point in new_string.stones:
-                self._grid[new_string_point] = new_string
-            for other_color_string in adjacent_opposite_color: # 敵の色の隣接する連の呼吸点を減らす
-                other_color_string.remove_liberty(point)
-            for other_color_string in adjacent_opposite_color: # 敵の色の連の呼吸点が0になっている場合は取り除く
-                if other_color_string.num_liberties == 0:
-                    self._remove_string(other_color_string)
+        new_string = GoString(player, [point], liberties)
+        for same_color_string in adjacent_same_color: # 同じ色の隣接する連をマージする
+            new_string = new_string.merged_with(same_color_string)
+        for new_string_point in new_string.stones:
+            self._grid[new_string_point] = new_string
+        for other_color_string in adjacent_opposite_color: # 敵の色の隣接する連の呼吸点を減らす
+            other_color_string.remove_liberty(point)
+        for other_color_string in adjacent_opposite_color: # 敵の色の連の呼吸点が0になっている場合は取り除く
+            if other_color_string.num_liberties == 0:
+                self._remove_string(other_color_string)
 
     def is_on_grid(self, point):
-        return 1 <= point.row <= self.num_rows and 1 <= point.num_cols <= self.num_cols
+        return 1 <= point.row <= self.num_rows and 1 <= point.col <= self.num_cols
 
     def get(self, point):
         string = self._grid.get(point)
@@ -110,7 +113,7 @@ class Board():
                     continue
                 if neighbor_string is not string:
                     neighbor_string.add_liberty(point)
-            self._grid[point] = None
+            del(self._grid[point])
 
 
 class GameState():
