@@ -4,8 +4,8 @@ COLS = "ABCDEFGHJKLMNOPQRST"
 
 STONE_TO_CHAR = {
     None: ".",
-    gotypes.Player.black: "x",
-    gotypes.Player.white: "o",
+    gotypes.Player.Black: "x",
+    gotypes.Player.White: "o",
 }
 
 

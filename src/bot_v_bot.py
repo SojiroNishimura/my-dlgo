@@ -3,7 +3,7 @@ import time
 import mydlgo
 from mydlgo import agent
 from mydlgo import goboard_slow
-from mydlgo import gotypes
+from mydlgo.gotypes import Player
 from mydlgo.utils import print_board, print_move
 
 
@@ -11,8 +11,8 @@ def main():
     board_size = 9
     game = goboard_slow.GameState.new_game(board_size)
     bots = {
-        gotypes.Player.black: agent.naive.RandomBot(),
-        gotypes.Player.white: agent.naive.RandomBot(),
+        Player.Black: agent.naive.RandomBot(),
+        Player.White: agent.naive.RandomBot(),
     }
 
     while not game.is_over():
