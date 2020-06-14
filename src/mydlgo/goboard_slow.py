@@ -1,5 +1,5 @@
 import copy
-from dlgo.gotypes import Player
+from .gotypes import Player
 
 
 class Move:
