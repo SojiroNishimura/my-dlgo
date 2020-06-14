@@ -1,12 +1,13 @@
 import copy
 from dlgo.gotypes import Player
 
-class Move():
+
+class Move:
     def __init__(self, point=None, is_pass=False, is_resign=False):
         assert (point is not None) ^ is_pass ^ is_resign
 
         self.point = point
-        self.is_play = (self.point is not None)
+        self.is_play = self.point is not None
         self.is_pass = is_pass
         self.is_resign = is_resign
 
@@ -23,7 +24,7 @@ class Move():
         return Move(is_resign=True)
 
 
-class GoString():
+class GoString:
     def __init__(self, color, stones, liberties):
         self.color = color
         self.stones = set(stones)
@@ -46,13 +47,15 @@ class GoString():
         return len(self.liberties)
 
     def __eq__(self, other):
-        return isinstance(other, GoString) and \
-            self.color == other.color and \
-            self.stones == other.stones and \
-            self.liberties == other.liberties
+        return (
+            isinstance(other, GoString)
+            and self.color == other.color
+            and self.stones == other.stones
+            and self.liberties == other.liberties
+        )
 
 
-class Board():
+class Board:
     def __init__(self, num_rows, num_cols):
         self.num_rows = num_rows
         self.num_cols = num_cols
@@ -78,15 +81,15 @@ class Board():
             else:
                 if neighbor_string not in adjacent_opposite_color:
                     adjacent_opposite_color.append(neighbor_string)
-            
+
         new_string = GoString(player, [point], liberties)
-        for same_color_string in adjacent_same_color: # 同じ色の隣接する連をマージする
+        for same_color_string in adjacent_same_color:  # 同じ色の隣接する連をマージする
             new_string = new_string.merged_with(same_color_string)
         for new_string_point in new_string.stones:
             self._grid[new_string_point] = new_string
-        for other_color_string in adjacent_opposite_color: # 敵の色の隣接する連の呼吸点を減らす
+        for other_color_string in adjacent_opposite_color:  # 敵の色の隣接する連の呼吸点を減らす
             other_color_string.remove_liberty(point)
-        for other_color_string in adjacent_opposite_color: # 敵の色の連の呼吸点が0になっている場合は取り除く
+        for other_color_string in adjacent_opposite_color:  # 敵の色の連の呼吸点が0になっている場合は取り除く
             if other_color_string.num_liberties == 0:
                 self._remove_string(other_color_string)
 
@@ -113,10 +116,10 @@ class Board():
                     continue
                 if neighbor_string is not string:
                     neighbor_string.add_liberty(point)
-            del(self._grid[point])
+            del self._grid[point]
 
 
-class GameState():
+class GameState:
     def __init__(self, board, next_player, previous, move):
         self.board = board
         self.next_player = next_player
@@ -151,7 +154,7 @@ class GameState():
     def is_move_self_capture(self, player, move):
         if not move.is_play:
             return False
-        
+
         next_board = copy.deepcopy(self.board)
         next_board.place_stone(player, move.point)
         new_string = next_board.get_go_string(move.point)
@@ -181,7 +184,7 @@ class GameState():
         if move.is_pass or move.is_resign:
             return True
         return (
-            self.board.get(move.point) is None and
-            not self.is_move_self_capture(self.next_player, move) and
-            not self.does_move_violate_ko(self.next_player, move)
+            self.board.get(move.point) is None
+            and not self.is_move_self_capture(self.next_player, move)
+            and not self.does_move_violate_ko(self.next_player, move)
         )
