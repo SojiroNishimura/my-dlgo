@@ -1,15 +1,14 @@
 import time
 
-import mydlgo
 from mydlgo import agent
-from mydlgo import goboard_slow
+from mydlgo.goboard_slow import GameState
 from mydlgo.gotypes import Player
 from mydlgo.utils import print_board, print_move
 
 
 def main():
     board_size = 9
-    game = goboard_slow.GameState.new_game(board_size)
+    game = GameState.new_game(board_size)
     bots = {
         Player.Black: agent.naive.RandomBot(),
         Player.White: agent.naive.RandomBot(),
