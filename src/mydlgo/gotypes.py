@@ -1,18 +1,20 @@
-import enum
+from __future__ import annotations
+from enum import Enum
 from collections import namedtuple
+from typing import List
 
 
-class Player(enum.Enum):
+class Player(Enum):
     Black = 1
     White = 2
 
     @property
-    def other(self):
+    def other(self) -> Player:
         return Player.Black if self == Player.White else Player.White
 
 
 class Point(namedtuple("Point", "row col")):
-    def neighbors(self):
+    def neighbors(self) -> List[Point]:
         return [
             Point(self.row - 1, self.col),
             Point(self.row + 1, self.col),

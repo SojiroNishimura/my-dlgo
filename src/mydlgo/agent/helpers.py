@@ -1,13 +1,14 @@
-from mydlgo.gotypes import Point
+from mydlgo.gotypes import Point, Player
+from mydlgo.goboard_slow import Board
 
 
-def is_point_an_eye(board, point, color):
-    if board.get(point) is not None:  # 空の点でなければ眼ではない
+def is_point_an_eye(board: Board, point: Point, color: Player) -> bool:
+    if board.get_player_at(point) is not None:  # 空の点でなければ眼ではない
         return False
 
     for neighbor in point.neighbors():  # 隣接する全ての点が味方ではない場合、眼ではない
         if board.is_on_grid(neighbor):
-            neighbor_color = board.get(neighbor)
+            neighbor_color = board.get_player_at(neighbor)
             if neighbor_color != color:
                 return False
 
@@ -22,7 +23,7 @@ def is_point_an_eye(board, point, color):
 
     for corner in corners:
         if board.is_on_grid(corner):
-            corner_color = board.get(corner)
+            corner_color = board.get_player_at(corner)
             if corner_color == color:
                 friendly_corners += 1
         else:

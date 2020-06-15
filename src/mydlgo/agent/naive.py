@@ -2,12 +2,12 @@ import random
 
 from .base import Agent
 from .helpers import is_point_an_eye
-from mydlgo.goboard_slow import Move
+from mydlgo.goboard_slow import Move, GameState
 from mydlgo.gotypes import Point
 
 
 class RandomBot(Agent):
-    def select_move(self, game_state):
+    def select_move(self, game_state: GameState) -> Move:
         """ Choose a random valid move that preserves our own eyes. """
         candidates = []
         for r in range(1, game_state.board.num_rows + 1):
@@ -18,6 +18,6 @@ class RandomBot(Agent):
                 ):
                     candidates.append(candidate)
 
-        if not candidates:
+        if len(candidates) == 0:
             return Move.pass_turn()
         return Move.play(random.choice(candidates))
