@@ -29,3 +29,12 @@ def print_board(board: Board):
             line.append(STONE_TO_CHAR[stone])
         print("%s%d %s" % (bump, row, "".join(line)))
     print("   " + "".join(COLS[: board.num_cols]))
+
+
+def point_from_coordinate(coordinate: str) -> Point:
+    """
+    coordinate: String expression of coordinate on the board(eg. E4, J16)
+    """
+    col = COLS.index(coordinate[0]) + 1
+    row = int(coordinate[1:])
+    return Point(row=row, col=col)
