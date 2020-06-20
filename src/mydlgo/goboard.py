@@ -3,6 +3,7 @@ from typing import Dict, List, Set, FrozenSet, Tuple, Optional, Union
 import copy
 
 from .gotypes import Player, Point
+from .scoring import compute_game_result
 from . import zobrist
 
 
@@ -232,4 +233,9 @@ class GameState:
         return moves
 
     def winner(self) -> Optional[Player]:
-        pass
+        if not self.is_over():
+            return None
+        if self.last_move is not None and self.last_move.is_resign:
+            return self.next_player
+        game_result = compute_game_result(self)
+        return game_result.winner
