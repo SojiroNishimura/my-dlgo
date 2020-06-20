@@ -1,1 +1,2 @@
-from .naive import RandomBot
+from .base import Agent  # noqa;
+from .naive import RandomBot  # noqa;

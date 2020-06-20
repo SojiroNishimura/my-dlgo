@@ -1,4 +1,4 @@
-from mydlgo.goboard_slow import GameState
+from mydlgo.goboard import GameState
 
 
 class Agent:
