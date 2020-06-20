@@ -1,7 +1,7 @@
 import time
 
 from mydlgo import agent
-from mydlgo.goboard_slow import GameState
+from mydlgo.goboard import GameState
 from mydlgo.gotypes import Player
 from mydlgo.utils import print_board, print_move
 

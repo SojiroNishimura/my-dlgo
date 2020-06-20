@@ -1,5 +1,5 @@
 from mydlgo.gotypes import Point, Player
-from mydlgo.goboard_slow import Board
+from mydlgo.goboard import Board
 
 
 def is_point_an_eye(board: Board, point: Point, color: Player) -> bool:

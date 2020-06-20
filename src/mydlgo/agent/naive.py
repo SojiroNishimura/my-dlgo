@@ -2,7 +2,7 @@ import random
 
 from .base import Agent
 from .helpers import is_point_an_eye
-from mydlgo.goboard_slow import Move, GameState
+from mydlgo.goboard import Move, GameState
 from mydlgo.gotypes import Point
 
 

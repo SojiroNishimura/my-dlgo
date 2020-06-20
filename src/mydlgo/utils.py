@@ -1,4 +1,4 @@
-from .goboard_slow import Board, Move
+from .goboard import Board, Move
 from .gotypes import Player, Point
 
 COLS = "ABCDEFGHJKLMNOPQRST"
