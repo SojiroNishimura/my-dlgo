@@ -2,8 +2,9 @@ from __future__ import absolute_import
 from collections import namedtuple
 from typing import Dict, List, Set, Tuple, Union, Optional
 
-from .goboard import Board, GameState
 from .gotypes import Player, Point
+
+# from .goboard import Board, GameState
 
 
 class Territory:
@@ -57,7 +58,8 @@ trivially dead groups.
 """
 
 
-def evaluate_territory(board: Board) -> Territory:
+# def evaluate_territory(board: Board) -> Territory:
+def evaluate_territory(board) -> Territory:
     status: Dict[Point, Union[Player, str]] = {}
     for r in range(1, board.num_rows + 1):
         for c in range(1, board.num_cols + 1):
@@ -94,7 +96,10 @@ identify all the boundary points.
 
 
 def _collect_region(
-    start_pos: Point, board: Board, visited: Dict[Point, bool] = None
+    # start_pos: Point, board: Board, visited: Dict[Point, bool] = None
+    start_pos: Point,
+    board,
+    visited: Dict[Point, bool] = None,
 ) -> Tuple[List[Point], Set[Optional[Player]]]:
     if visited is None:
         visited = {}
@@ -120,7 +125,8 @@ def _collect_region(
     return all_points, all_borders
 
 
-def compute_game_result(game_state: GameState) -> GameResult:
+# def compute_game_result(game_state: GameState) -> GameResult:
+def compute_game_result(game_state) -> GameResult:
     territory = evaluate_territory(game_state.board)
     return GameResult(
         territory.num_black_territory + territory.num_black_stones,
