@@ -28,7 +28,7 @@ class Move:
         return Move(is_resign=True)
 
 
-StringOrLiberty = Union[Point, Set[Point], FrozenSet[Point]]
+StringOrLiberty = Union[Point, List[Point], Set[Point], FrozenSet[Point]]
 
 
 class GoString:
@@ -76,6 +76,8 @@ class Board:
 
     def place_stone(self, player: Player, point: Point):
         assert self.is_on_grid(point)
+        if self._grid.get(point) is not None:
+            print(f"Illegal play on {str(point)}")
         assert self._grid.get(point) is None
 
         adjacent_same_color: List[GoString] = []
@@ -95,7 +97,7 @@ class Board:
                 if neighbor_string not in adjacent_opposite_color:
                     adjacent_opposite_color.append(neighbor_string)
 
-        new_string = GoString(player, point, liberties)
+        new_string = GoString(player, [point], liberties)
 
         for same_color_string in adjacent_same_color:  # 同じ色の隣接する連をマージする
             new_string = new_string.merged_with(same_color_string)
