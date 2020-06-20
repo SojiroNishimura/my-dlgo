@@ -170,6 +170,10 @@ class GameState:
         board = Board(board_size, board_size)
         return GameState(board, Player.Black, None, None)
 
+    @property
+    def situation(self) -> Tuple[Player, Board]:
+        return (self.next_player, self.board)
+
     def is_over(self) -> bool:
         if self.previous_state is None or self.last_move is None:
             return False
@@ -189,10 +193,6 @@ class GameState:
         next_board.place_stone(player, move.point)
         new_string = next_board.get_go_string(move.point)
         return new_string.is_captured() if new_string is not None else False
-
-    @property
-    def situation(self) -> Tuple[Player, Board]:
-        return (self.next_player, self.board)
 
     def does_move_violate_ko(self, player: Player, move: Move) -> bool:
         if not move.is_play:
@@ -216,3 +216,18 @@ class GameState:
             and not self.is_move_self_capture(self.next_player, move)
             and not self.does_move_violate_ko(self.next_player, move)
         )
+
+    def legal_moves(self) -> List[Move]:
+        moves: List[Move] = []
+        for row in range(1, self.board.num_rows + 1):
+            for col in range(1, self.board.num_cols + 1):
+                move = Move.play(Point(row, col))
+                if self.is_valid_move(move):
+                    moves.append(move)
+        moves.append(Move.pass_turn())
+        moves.append(Move.resign())
+
+        return moves
+
+    def winner(self) -> Optional[Player]:
+        pass
