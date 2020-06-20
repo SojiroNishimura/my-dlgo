@@ -1,15 +1,13 @@
-# tag::scoring_imports[]
 from __future__ import absolute_import
 from collections import namedtuple
+from typing import Dict, List, Set, Tuple, Union, Optional
 
+from .goboard import Board, GameState
 from .gotypes import Player, Point
 
-# end::scoring_imports[]
 
-
-# tag::scoring_territory[]
 class Territory:
-    def __init__(self, territory_map):  # <1>
+    def __init__(self, territory_map: Dict[Point, Union[Player, str]]):  # <1>
         self.num_black_territory = 0
         self.num_white_territory = 0
         self.num_black_stones = 0
@@ -32,30 +30,22 @@ class Territory:
 
 # <1> A `territory_map` splits the board into stones, territory and neutral points (dame).
 # <2> Depending on the status of a point, we increment the respective counter.
-# end::scoring_territory[]
 
 
-# tag::scoring_game_result[]
 class GameResult(namedtuple("GameResult", "b w komi")):
     @property
-    def winner(self):
-        if self.b > self.w + self.komi:
-            return Player.Black
-        return Player.White
+    def winner(self) -> Player:
+        return Player.Black if self.b > self.w + self.komi else Player.White
 
     @property
-    def winning_margin(self):
-        w = self.w + self.komi
-        return abs(self.b - w)
+    def winning_margin(self) -> int:
+        return abs(self.b - (self.w + self.komi))
 
     def __str__(self):
         w = self.w + self.komi
         if self.b > w:
             return "B+%.1f" % (self.b - w,)
         return "W+%.1f" % (w - self.b,)
-
-
-# end::scoring_game_result[]
 
 
 """ evaluate_territory:
@@ -67,10 +57,8 @@ trivially dead groups.
 """
 
 
-# tag::scoring_evaluate_territory[]
-def evaluate_territory(board):
-
-    status = {}
+def evaluate_territory(board: Board) -> Territory:
+    status: Dict[Point, Union[Player, str]] = {}
     for r in range(1, board.num_rows + 1):
         for c in range(1, board.num_cols + 1):
             p = Point(row=r, col=c)
@@ -78,13 +66,12 @@ def evaluate_territory(board):
                 continue
             stone = board.get_player_at(p)
             if stone is not None:  # <2>
-                status[p] = board.get_player_at(p)
+                status[p] = stone  # Add Player color as the holder of the point
             else:
                 group, neighbors = _collect_region(p, board)
                 if len(neighbors) == 1:  # <3>
                     neighbor_stone = neighbors.pop()
-                    stone_str = "b" if neighbor_stone == Player.Black else "w"
-                    fill_with = "territory_" + stone_str
+                    fill_with = "territory_b" if neighbor_stone == Player.Black else "territory_w"
                 else:
                     fill_with = "dame"  # <4>
                 for pos in group:
@@ -106,13 +93,14 @@ identify all the boundary points.
 """
 
 
-# tag::scoring_collect_region[]
-def _collect_region(start_pos, board, visited=None):
-
+def _collect_region(
+    start_pos: Point, board: Board, visited: Dict[Point, bool] = None
+) -> Tuple[List[Point], Set[Optional[Player]]]:
     if visited is None:
         visited = {}
     if start_pos in visited:
         return [], set()
+
     all_points = [start_pos]
     all_borders = set()
     visited[start_pos] = True
@@ -132,17 +120,10 @@ def _collect_region(start_pos, board, visited=None):
     return all_points, all_borders
 
 
-# end::scoring_collect_region[]
-
-
-# tag::scoring_compute_game_result[]
-def compute_game_result(game_state):
+def compute_game_result(game_state: GameState) -> GameResult:
     territory = evaluate_territory(game_state.board)
     return GameResult(
         territory.num_black_territory + territory.num_black_stones,
         territory.num_white_territory + territory.num_white_stones,
         komi=7.5,
     )
-
-
-# end::scoring_compute_game_result[]
