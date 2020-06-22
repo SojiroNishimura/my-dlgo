@@ -5,12 +5,12 @@ from typing import List
 
 
 class Player(Enum):
-    Black = 1
-    White = 2
+    BLACK = 1
+    WHITE = 2
 
     @property
     def other(self) -> Player:
-        return Player.Black if self == Player.White else Player.White
+        return Player.BLACK if self == Player.WHITE else Player.WHITE
 
 
 class Point(namedtuple("Point", "row col")):

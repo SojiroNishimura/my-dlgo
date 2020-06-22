@@ -13,7 +13,7 @@ def main():
     while not game.is_over():
         print(chr(27) + "[2J")
         print_board(game.board)
-        if game.next_player == gotypes.Player.Black:
+        if game.next_player == gotypes.Player.BLACK:
             human_move = input("-- ")
             point = point_from_coordinate(human_move.strip())
             move = goboard_slow.Move.play(point)

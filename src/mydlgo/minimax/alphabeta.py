@@ -27,13 +27,13 @@ def alpha_beta_result(
 
         if our_result > best_so_far:
             best_so_far = our_result
-        if game_state.next_player == Player.White:
+        if game_state.next_player == Player.WHITE:
             if best_so_far > best_white:
                 best_white = best_so_far
             outcome_for_black = -best_so_far
             if outcome_for_black < best_black:
                 return best_so_far
-        elif game_state.next_player == Player.Black:
+        elif game_state.next_player == Player.BLACK:
             if best_so_far > best_black:
                 best_black = best_so_far
             outcome_for_white = -best_so_far
@@ -64,9 +64,9 @@ class AlphaBetaAgent(Agent):
                 # This is the best move so far.
                 best_moves = [possible_move]
                 best_score = our_best_outcome
-                if game_state.next_player == Player.Black:
+                if game_state.next_player == Player.BLACK:
                     best_black = best_score
-                elif game_state.next_player == Player.White:
+                elif game_state.next_player == Player.WHITE:
                     best_white = best_score
             elif our_best_outcome == best_score:
                 # This is as good as our previous best move.

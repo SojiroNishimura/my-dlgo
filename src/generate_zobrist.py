@@ -7,7 +7,7 @@ from mydlgo.gotypes import Player, Point
 def to_python(state: Optional[Player]) -> Union[Player, str]:
     if state is None:
         return "None"
-    return Player.Black if state == Player.Black else Player.White
+    return Player.BLACK if state == Player.BLACK else Player.WHITE
 
 
 MAX63 = 0x7FFFFFFFFFFFFFFF
@@ -17,7 +17,7 @@ empty_board = 0
 
 for row in range(1, 20):
     for col in range(1, 20):
-        for state in (None, Player.Black, Player.White):
+        for state in (None, Player.BLACK, Player.WHITE):
             code = random.randint(0, MAX63)
             table[(Point(row, col), state)] = code
 

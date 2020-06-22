@@ -144,7 +144,7 @@ class GameState:
     @classmethod
     def new_game(cls, board_size: int) -> GameState:
         board = Board(board_size, board_size)
-        return GameState(board, Player.Black, None, None)
+        return GameState(board, Player.BLACK, None, None)
 
     def is_over(self) -> bool:
         if self.previous_state is None or self.last_move is None:

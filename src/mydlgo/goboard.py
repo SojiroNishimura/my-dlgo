@@ -171,7 +171,7 @@ class GameState:
     @classmethod
     def new_game(cls, board_size: int) -> GameState:
         board = Board(board_size, board_size)
-        return GameState(board, Player.Black, None, None)
+        return GameState(board, Player.BLACK, None, None)
 
     @property
     def situation(self) -> Tuple[Player, Board]:

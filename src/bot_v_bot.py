@@ -10,8 +10,8 @@ def main():
     board_size = 9
     game = GameState.new_game(board_size)
     bots = {
-        Player.Black: agent.naive.RandomBot(),
-        Player.White: agent.naive.RandomBot(),
+        Player.BLACK: agent.naive.RandomBot(),
+        Player.WHITE: agent.naive.RandomBot(),
     }
 
     while not game.is_over():

@@ -13,27 +13,22 @@ MAX_ROW = 19
 
 
 class CommandType(Enum):
-    ProtcolVersion = "protocol_version"
-    Name = "name"
-    Version = "version"
-    KnownCommand = "known_command"
-    ListCommands = "list_commands"
-    Quit = "quit"
-    Boardsize = "boardsize"
-    ClearBoard = "ClearBoard"
-    Komi = "komi"
-    Play = "play"
-    Genmove = "genmove"
-
-
-class BasePlayer(Enum):
-    Black = auto()
-    White = auto()
+    PROTOCOL_VERSION = "protocol_version"
+    NAME = "name"
+    VERSION = "version"
+    KNOWN_COMMAND = "known_command"
+    LIST_COMMANDS = "list_commands"
+    QUIT = "quit"
+    BOARDSIZE = "boardsize"
+    CLEAR_BOARD = "ClearBoard"
+    KOMI = "komi"
+    PLAY = "play"
+    GENMOVE = "genmove"
 
 
 class Color(Enum):
-    Black = "Black"
-    White = "White"
+    BLACK = "Black"
+    WHITE = "White"
 
 
 class Vertex:
@@ -58,25 +53,25 @@ class Command:
 
     @staticmethod
     def boardsize(size: int) -> Command:
-        return Command(CommandType.Boardsize, arg=size)
+        return Command(CommandType.BOARDSIZE, arg=size)
 
     @staticmethod
     def clearBoard() -> Command:
-        return Command(CommandType.ClearBoard)
+        return Command(CommandType.CLEAR_BOARD)
 
     @staticmethod
     def komi(komi: float) -> Command:
-        return Command(CommandType.Komi, arg=komi)
+        return Command(CommandType.KOMI, arg=komi)
 
     @staticmethod
     def play(player: Player, point: Point) -> Command:
-        color = Color.Black if Player == Player.Black else Color.White
+        color = Color.BLACK if Player == Player.BLACK else Color.WHITE
         v = Vertex.from_point(point)
-        return Command(CommandType.Play, arg=f"{color} {v}")
+        return Command(CommandType.PLAY, arg=f"{color} {v}")
 
     @staticmethod
     def genmove(color: Color) -> Command:
-        return Command(CommandType.Genmove, arg=color)
+        return Command(CommandType.GENMOVE, arg=color)
 
 
 """

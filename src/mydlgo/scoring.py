@@ -16,9 +16,9 @@ class Territory:
         self.num_dame = 0
         self.dame_points = []
         for point, status in territory_map.items():  # <2>
-            if status == Player.Black:
+            if status == Player.BLACK:
                 self.num_black_stones += 1
-            elif status == Player.White:
+            elif status == Player.WHITE:
                 self.num_white_stones += 1
             elif status == "territory_b":
                 self.num_black_territory += 1
@@ -36,7 +36,7 @@ class Territory:
 class GameResult(namedtuple("GameResult", "b w komi")):
     @property
     def winner(self) -> Player:
-        return Player.Black if self.b > self.w + self.komi else Player.White
+        return Player.BLACK if self.b > self.w + self.komi else Player.WHITE
 
     @property
     def winning_margin(self) -> int:
@@ -73,7 +73,7 @@ def evaluate_territory(board) -> Territory:
                 group, neighbors = _collect_region(p, board)
                 if len(neighbors) == 1:  # <3>
                     neighbor_stone = neighbors.pop()
-                    fill_with = "territory_b" if neighbor_stone == Player.Black else "territory_w"
+                    fill_with = "territory_b" if neighbor_stone == Player.BLACK else "territory_w"
                 else:
                     fill_with = "dame"  # <4>
                 for pos in group:

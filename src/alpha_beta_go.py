@@ -16,12 +16,12 @@ def capture_diff(game_state: GameState):
         for c in range(1, game_state.board.num_cols + 1):
             p = Point(r, c)
             color = game_state.board.get_player_at(p)
-            if color == Player.Black:
+            if color == Player.BLACK:
                 black_stones += 1
-            elif color == Player.White:
+            elif color == Player.WHITE:
                 white_stones += 1
     diff = black_stones - white_stones
-    return diff if game_state.next_player == Player.Black else -diff
+    return diff if game_state.next_player == Player.BLACK else -diff
 
 
 def main():
@@ -30,7 +30,7 @@ def main():
 
     while not game.is_over():
         print_board(game.board)
-        if game.next_player == Player.Black:
+        if game.next_player == Player.BLACK:
             human_move = input("-- ")
             if human_move.find("pass") != -1:
                 move = Move.pass_turn()

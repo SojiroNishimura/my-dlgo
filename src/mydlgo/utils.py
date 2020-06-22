@@ -5,8 +5,8 @@ COLS = "ABCDEFGHJKLMNOPQRST"
 
 STONE_TO_CHAR = {
     None: ".",
-    Player.Black: "x",
-    Player.White: "o",
+    Player.BLACK: "x",
+    Player.WHITE: "o",
 }
 
 
