@@ -1,8 +1,7 @@
 from __future__ import annotations  # type: ignore
-from enum import Enum, auto
+from abc import ABC
+from enum import Enum
 from typing import Any, Optional
-
-from mydlgo.gotypes import Player, Point
 
 """
 See: http://www.lysator.liu.se/~gunnar/gtp/gtp2-spec-draft2/gtp2-spec.html
@@ -24,6 +23,28 @@ class CommandType(Enum):
     KOMI = "komi"
     PLAY = "play"
     GENMOVE = "genmove"
+
+
+# Just an interface for callers of this library
+class Point(ABC):
+    @property
+    def row(self) -> int:
+        raise NotImplementedError()
+
+    @property
+    def col(self) -> int:
+        raise NotImplementedError()
+
+
+# Just an interface for callers of this library
+class Player(ABC):
+    @property
+    def BLACK(self):
+        raise NotImplementedError()
+
+    @property
+    def WHITE(self):
+        raise NotImplementedError()
 
 
 class Color(Enum):
