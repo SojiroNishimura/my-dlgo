@@ -53,17 +53,17 @@ class Color(Enum):
 
 
 class Vertex:
-    def __init__(self, col: str, row: int, is_pass=False):
-        self.col = col
+    def __init__(self, row: int, col: str, is_pass=False):
         self.row = row
+        self.col = col
         self.pass_ = "pass" if is_pass else None
 
     def __str__(self):
         return f"{self.col}{self.row}"
 
     @staticmethod
-    def from_point(point: Point) -> Vertex:
-        pass
+    def from_point(p: Point) -> Vertex:
+        return Vertex(row=p.row, col=COLS[p.col - 1])
 
 
 class Command:
@@ -73,26 +73,31 @@ class Command:
         self.arg = arg
 
     @staticmethod
-    def boardsize(size: int) -> Command:
-        return Command(CommandType.BOARDSIZE, arg=size)
+    def boardsize(id: Optional[int], size: int) -> Command:
+        if size < 1 or MAX_ROW < size:
+            raise ValueError(f"Board size is too big, must be 1 <= 19: {size}")
+        return Command(CommandType.BOARDSIZE, id, arg=size)
 
     @staticmethod
-    def clearBoard() -> Command:
-        return Command(CommandType.CLEAR_BOARD)
+    def clearBoard(id: Optional[int]) -> Command:
+        return Command(CommandType.CLEAR_BOARD, id)
 
     @staticmethod
-    def komi(komi: float) -> Command:
-        return Command(CommandType.KOMI, arg=komi)
+    def komi(id: Optional[int], komi: float) -> Command:
+        return Command(CommandType.KOMI, id, arg=komi)
 
     @staticmethod
-    def play(player: Player, point: Point) -> Command:
+    def play(player: Player, id: Optional[int], point: Point) -> Command:
         color = Color.BLACK if Player == Player.BLACK else Color.WHITE
         v = Vertex.from_point(point)
-        return Command(CommandType.PLAY, arg=f"{color} {v}")
+        return Command(CommandType.PLAY, id, arg=f"{color} {v}")
 
     @staticmethod
-    def genmove(color: Color) -> Command:
-        return Command(CommandType.GENMOVE, arg=color)
+    def genmove(id: Optional[int], color: Color) -> Command:
+        return Command(CommandType.GENMOVE, id, arg=color)
+
+    def __str__(self):
+        return f"{self.command_type} {self.id if self.id is not None else ''} {self.arg}"
 
 
 """
