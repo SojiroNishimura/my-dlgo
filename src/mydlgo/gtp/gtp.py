@@ -98,14 +98,20 @@ class Command:
     def play(player: Union[Player, int, str], point: Point, id: Optional[int] = None) -> Command:
         color = Color.BLACK if Player.is_black(player) else Color.WHITE
         v = Vertex.from_point(point)
-        return Command(CommandType.PLAY, id, arg=f"{color} {v}")
+        return Command(CommandType.PLAY, id, arg=f"{color.value} {v}")
 
     @staticmethod
     def genmove(color: Color, id: Optional[int] = None) -> Command:
         return Command(CommandType.GENMOVE, id, arg=color)
 
+    def to_string(self):
+        id_str = f"{id} " if self.id is not None else ""
+        args = f" {self.arg}" if self.arg is not None else ""
+        return f"{id_str}{self.command_type.value}{args}"
+
     def __str__(self):
-        return f"{self.command_type} {self.id if self.id is not None else ''} {self.arg}"
+        id_str = " {} ".format(self.id) if self.id is not None else " "
+        return f"{self.command_type}{id_str}{self.arg}"
 
 
 """
