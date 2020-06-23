@@ -109,13 +109,17 @@ class Command:
         return Command(CommandType.GENMOVE, id, arg=color_str)
 
     def to_string(self):
+        return self.__str__()
+
+    def __str__(self):
         id_str = f"{id} " if self.id is not None else ""
         args = f" {self.arg}" if self.arg is not None else ""
         return f"{id_str}{self.command_type.value}{args}"
 
-    def __str__(self):
-        id_str = " {} ".format(self.id) if self.id is not None else " "
-        return f"{self.command_type}{id_str}{self.arg}"
+    def __repr__(self):
+        id_str = f"id={self.id}, " if self.id is not None else "id=None, "
+        args = f'arg="{self.arg}"' if self.arg is not None else "arg=None"
+        return f"{self.__class__.__name__}({self.command_type}, {id_str}{args})"
 
 
 """
