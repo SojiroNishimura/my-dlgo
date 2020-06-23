@@ -1,7 +1,7 @@
 from __future__ import annotations  # type: ignore
 from abc import ABC
 from enum import Enum
-from typing import Any, Optional, Union
+from typing import Any, Optional, Union, NamedTuple
 
 """
 See: http://www.lysator.liu.se/~gunnar/gtp/gtp2-spec-draft2/gtp2-spec.html
@@ -74,6 +74,9 @@ class Vertex:
         return Vertex(row=p.row, col=COLS[p.col - 1])
 
 
+# Move = NamedTuple("Move", [("color", Color), ("vertex", Vertex)])
+
+
 class Command:
     def __init__(self, command_type: CommandType, id: Optional[int] = None, arg: Optional[Any] = None):
         self.id = id if id is not None else None
@@ -101,8 +104,9 @@ class Command:
         return Command(CommandType.PLAY, id, arg=f"{color.value} {v}")
 
     @staticmethod
-    def genmove(color: Color, id: Optional[int] = None) -> Command:
-        return Command(CommandType.GENMOVE, id, arg=color)
+    def genmove(color: Union[Color, str], id: Optional[int] = None) -> Command:
+        color_str = color.value if isinstance(color, Color) else color.lower()
+        return Command(CommandType.GENMOVE, id, arg=color_str)
 
     def to_string(self):
         id_str = f"{id} " if self.id is not None else ""
