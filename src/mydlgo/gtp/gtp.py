@@ -81,27 +81,27 @@ class Command:
         self.arg = arg
 
     @staticmethod
-    def boardsize(id: Optional[int], size: int) -> Command:
+    def boardsize(size: int, id: Optional[int] = None) -> Command:
         if size < 1 or MAX_ROW < size:
             raise ValueError(f"Board size is too big, must be 1 <= 19: {size}")
         return Command(CommandType.BOARDSIZE, id, arg=size)
 
     @staticmethod
-    def clearBoard(id: Optional[int]) -> Command:
+    def clear_board(id: Optional[int] = None) -> Command:
         return Command(CommandType.CLEAR_BOARD, id)
 
     @staticmethod
-    def komi(id: Optional[int], komi: float) -> Command:
+    def komi(komi: float, id: Optional[int] = None) -> Command:
         return Command(CommandType.KOMI, id, arg=komi)
 
     @staticmethod
-    def play(player: Player, id: Optional[int], point: Point) -> Command:
-        color = Color.BLACK if Player == Player.BLACK else Color.WHITE
+    def play(player: Union[Player, int, str], point: Point, id: Optional[int] = None) -> Command:
+        color = Color.BLACK if Player.is_black(player) else Color.WHITE
         v = Vertex.from_point(point)
         return Command(CommandType.PLAY, id, arg=f"{color} {v}")
 
     @staticmethod
-    def genmove(id: Optional[int], color: Color) -> Command:
+    def genmove(color: Color, id: Optional[int] = None) -> Command:
         return Command(CommandType.GENMOVE, id, arg=color)
 
     def __str__(self):
