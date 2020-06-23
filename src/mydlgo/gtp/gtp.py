@@ -1,7 +1,7 @@
 from __future__ import annotations  # type: ignore
 from abc import ABC
 from enum import Enum
-from typing import Any, Optional
+from typing import Any, Optional, Union
 
 """
 See: http://www.lysator.liu.se/~gunnar/gtp/gtp2-spec-draft2/gtp2-spec.html
@@ -19,7 +19,7 @@ class CommandType(Enum):
     LIST_COMMANDS = "list_commands"
     QUIT = "quit"
     BOARDSIZE = "boardsize"
-    CLEAR_BOARD = "ClearBoard"
+    CLEAR_BOARD = "clear_board"
     KOMI = "komi"
     PLAY = "play"
     GENMOVE = "genmove"
@@ -39,17 +39,25 @@ class Point(ABC):
 # Just an interface for callers of this library
 class Player(ABC):
     @property
-    def BLACK(self):
+    def BLACK(self) -> Union[int, str]:
         raise NotImplementedError()
 
     @property
-    def WHITE(self):
+    def WHITE(self) -> Union[int, str]:
         raise NotImplementedError()
+
+    @staticmethod
+    def is_black(player: Union[Player, int, str]) -> bool:
+        val = player.value if isinstance(player, Enum) else player
+        if (isinstance(val, int) and val == 1) or (isinstance(val, str) and val.lower() == Color.BLACK):
+            return True
+        else:
+            return False
 
 
 class Color(Enum):
-    BLACK = "Black"
-    WHITE = "White"
+    BLACK = "black"
+    WHITE = "white"
 
 
 class Vertex:
