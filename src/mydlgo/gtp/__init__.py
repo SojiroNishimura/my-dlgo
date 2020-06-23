@@ -1,1 +1,1 @@
-from .gtp import Command  # noqa;
+from .gtp import *  # noqa;
