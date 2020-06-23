@@ -1,7 +1,7 @@
 from __future__ import annotations  # type: ignore
 from abc import ABC
 from enum import Enum
-from typing import Any, Optional, Union, NamedTuple
+from typing import Any, Optional, Union
 
 """
 See: http://www.lysator.liu.se/~gunnar/gtp/gtp2-spec-draft2/gtp2-spec.html
@@ -35,52 +35,50 @@ class Point(ABC):
     def col(self) -> int:
         raise NotImplementedError()
 
-
-# Just an interface for callers of this library
-class Player(ABC):
-    @property
-    def BLACK(self) -> Union[int, str]:
-        raise NotImplementedError()
-
-    @property
-    def WHITE(self) -> Union[int, str]:
-        raise NotImplementedError()
-
     @staticmethod
-    def is_black(player: Union[Player, int, str]) -> bool:
-        val = player.value if isinstance(player, Enum) else player
-        if (isinstance(val, int) and val == 1) or (isinstance(val, str) and val.lower() == Color.BLACK):
-            return True
-        else:
-            return False
+    def is_point(p) -> bool:
+        return hasattr(p, "row") and hasattr(p, "col")
 
 
 class Color(Enum):
     BLACK = "black"
     WHITE = "white"
 
+    @staticmethod
+    def is_black(player: Union[Color, int, str]) -> bool:
+        val = player.value if isinstance(player, Enum) else player
+        if (isinstance(val, int) and val == 1) or (isinstance(val, str) and val.lower() == Color.BLACK.value):
+            return True
+        else:
+            return False
+
 
 class Vertex:
-    def __init__(self, row: int, col: str, is_pass=False):
+    def __init__(self, row: Optional[int], col: Optional[str], is_pass=False):
         self.row = row
         self.col = col
-        self.pass_ = "pass" if is_pass else None
+        self.is_pass = is_pass
 
     def __str__(self):
-        return f"{self.col}{self.row}"
+        return f"{self.col}{self.row}" if not self.is_pass else "pass"
 
     @staticmethod
-    def from_point(p: Point) -> Vertex:
-        return Vertex(row=p.row, col=COLS[p.col - 1])
-
-
-# Move = NamedTuple("Move", [("color", Color), ("vertex", Vertex)])
+    def from_point(p: Union[Point, str]) -> Union[Vertex, str]:
+        if Point.is_point(p):
+            # assert isinstance(p, Point)
+            return Vertex(row=p.row, col=COLS[p.col - 1])  # type: ignore
+        elif isinstance(p, str) and p != "pass":
+            row = int(p[1:])
+            col = p[0]
+            return Vertex(row, col)
+        else:
+            return Vertex(None, None, is_pass=True)
 
 
 class Command:
     def __init__(self, command_type: CommandType, id: Optional[int] = None, arg: Optional[Any] = None):
-        self.id = id if id is not None else None
         self.command_type = command_type
+        self.id = id if id is not None else None
         self.arg = arg
 
     @staticmethod
@@ -98,8 +96,8 @@ class Command:
         return Command(CommandType.KOMI, id, arg=komi)
 
     @staticmethod
-    def play(player: Union[Player, int, str], point: Point, id: Optional[int] = None) -> Command:
-        color = Color.BLACK if Player.is_black(player) else Color.WHITE
+    def play(player: Union[Color, int, str], point: Union[Point, str], id: Optional[int] = None) -> Command:
+        color = Color.BLACK if Color.is_black(player) else Color.WHITE
         v = Vertex.from_point(point)
         return Command(CommandType.PLAY, id, arg=f"{color.value} {v}")
 
